@@ -2,7 +2,10 @@ import sqlite3 from "sqlite3";
 import path from "path";
 
 // Initialize the SQLite database connection
-const dbPath = path.resolve(process.cwd(), "database.sqlite");
+// Use /tmp in Vercel because the root filesystem is read-only in production serverless environments.
+const dbPath = process.env.VERCEL 
+  ? "/tmp/database.sqlite" 
+  : path.resolve(process.cwd(), "database.sqlite");
 
 export const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
