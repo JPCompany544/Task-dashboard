@@ -25,15 +25,10 @@ export async function PATCH(
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Create a unique file name
-    const ext = path.extname(file.name) || ".png";
-    const fileName = crypto.randomBytes(16).toString("hex") + ext;
-    const relativeFilePath = `/uploads/funding_proofs/${fileName}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "funding_proofs");
-    const filePath = path.join(uploadDir, fileName);
-
-    // Save the file
-    await writeFile(filePath, buffer);
+    // Convert file to base64 Data URI instead of saving to disk (Vercel is read-only)
+    const mimeType = file.type || "image/png";
+    const base64Data = buffer.toString("base64");
+    const relativeFilePath = `data:${mimeType};base64,${base64Data}`;
 
     // Update the database
     return new Promise<NextResponse>((resolve) => {

@@ -43,12 +43,10 @@ export async function PATCH(
     if (file && file.size > 0) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const ext = path.extname(file.name) || ".png";
-      const fileName = crypto.randomBytes(16).toString("hex") + ext;
-      const uploadDir = path.join(process.cwd(), "public", "uploads", "task_proofs");
-      await mkdir(uploadDir, { recursive: true });
-      await writeFile(path.join(uploadDir, fileName), buffer);
-      proofUrl = `/uploads/task_proofs/${fileName}`;
+      // Convert file to base64 Data URI instead of saving to disk
+      const mimeType = file.type || "image/png";
+      const base64Data = buffer.toString("base64");
+      proofUrl = `data:${mimeType};base64,${base64Data}`;
     }
 
     return new Promise<NextResponse>((resolve) => {
