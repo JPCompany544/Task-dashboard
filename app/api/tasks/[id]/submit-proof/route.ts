@@ -11,14 +11,21 @@ export async function PATCH(
       return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
     }
 
-    const formData = await request.formData();
-    const file = formData.get("screenshot") as File | null;
-    const txHash = (formData.get("tx_hash") as string)?.trim() || "";
-    const wallet = (formData.get("wallet") as string)?.trim() || "";
+    const body = await request.json();
+    const txHash = (body.tx_hash as string)?.trim() || "";
+    const wallet = (body.wallet as string)?.trim() || "";
+    const proofUrl = body.proof_url || null;
 
     if (!txHash || !wallet) {
       return NextResponse.json(
         { error: "Transaction hash and wallet address are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!proofUrl) {
+      return NextResponse.json(
+        { error: "Proof URL is required" },
         { status: 400 }
       );
     }
@@ -32,16 +39,6 @@ export async function PATCH(
 
     if (!task) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
-    }
-
-    let proofUrl: string | null = null;
-
-    if (file && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const mimeType = file.type || "image/png";
-      const base64Data = buffer.toString("base64");
-      proofUrl = `data:${mimeType};base64,${base64Data}`;
     }
 
     const result: any = await new Promise((resolve, reject) => {

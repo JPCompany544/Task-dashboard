@@ -43,6 +43,16 @@ export default function ProofApprovalsPage() {
   const [pendingProofs, setPendingProofs] = useState<PendingProof[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
+  const [previewId, setPreviewId] = useState<string | null>(null);
+
+  const getFileType = (url: string) => {
+    if (!url) return "unknown";
+    const lowerUrl = url.toLowerCase();
+    if (lowerUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)/) || lowerUrl.includes("image/upload")) return "image";
+    if (lowerUrl.endsWith(".pdf") || lowerUrl.includes("/raw/upload") || lowerUrl.includes(".pdf")) return "pdf";
+    if (lowerUrl.match(/\.(mp4|webm|ogg|mov|mkv|3gp|wmv)/) || lowerUrl.includes("video/upload")) return "video";
+    return "unknown";
+  };
 
   const navItems = [
     { name: "Dashboard",       icon: LayoutDashboard, href: "/admin/dashboard" },
@@ -275,15 +285,13 @@ export default function ProofApprovalsPage() {
                           {/* Screenshot */}
                           <td className="px-6 py-4 whitespace-nowrap text-center">
                             {task.completion_proof_url ? (
-                              <a
-                                href={task.completion_proof_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                              <button
+                                onClick={() => setPreviewId(task.task_id)}
                                 className="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 text-xs font-semibold rounded-lg transition-colors border border-slate-200 hover:border-blue-200"
                               >
                                 <Eye className="w-3.5 h-3.5 mr-1.5" />
                                 View
-                              </a>
+                              </button>
                             ) : (
                               <span className="text-xs text-slate-400 italic">No file</span>
                             )}
@@ -340,6 +348,88 @@ export default function ProofApprovalsPage() {
           </div>
         </main>
       </div>
+
+      {/* ── PREVIEW MODAL ── */}
+      {previewId && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setPreviewId(null)} />
+          <div className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Proof Preview</h3>
+                <p className="text-[10px] text-slate-400 font-mono uppercase mt-0.5">{previewId}</p>
+              </div>
+              <button onClick={() => setPreviewId(null)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-auto p-6 bg-slate-50 flex items-center justify-center min-h-[300px]">
+              {(() => {
+                const task = pendingProofs.find(t => t.task_id === previewId);
+                if (!task || !task.completion_proof_url) return null;
+                const fileType = getFileType(task.completion_proof_url);
+                
+                if (fileType === "image") {
+                  return (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={task.completion_proof_url} alt="Proof" className="max-w-full max-h-full object-contain rounded-lg shadow-sm border border-slate-200" />
+                  );
+                } else if (fileType === "video") {
+                  return (
+                    <video controls src={task.completion_proof_url} className="max-w-full max-h-full rounded-lg shadow-sm" />
+                  );
+                } else if (fileType === "pdf") {
+                  return (
+                    <div className="text-center p-12 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                      <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <FileCheck className="w-10 h-10" />
+                      </div>
+                      <h4 className="text-lg font-bold text-slate-900 mb-2">PDF Document</h4>
+                      <p className="text-sm text-slate-500 mb-8 max-w-xs mx-auto">This proof is a PDF document. Please open it in a new window to review.</p>
+                      <a 
+                        href={task.completion_proof_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md shadow-blue-100"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        Open PDF in New Tab
+                      </a>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="text-center p-12">
+                      <p className="text-sm text-slate-500">Unable to preview this file type directly.</p>
+                      <a href={task.completion_proof_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline mt-4 block">
+                        Open File Link
+                      </a>
+                    </div>
+                  );
+                }
+              })()}
+            </div>
+            
+            <div className="px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-end space-x-3 shrink-0">
+              <button
+                onClick={() => { handleAction(previewId, "reject"); setPreviewId(null); }}
+                className="px-5 py-2.5 text-red-600 hover:bg-red-50 font-bold text-xs rounded-xl transition-colors"
+                disabled={processingId === previewId}
+              >
+                Reject Proof
+              </button>
+              <button
+                onClick={() => { handleAction(previewId, "approve"); setPreviewId(null); }}
+                className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-emerald-100"
+                disabled={processingId === previewId}
+              >
+                Approve Proof
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

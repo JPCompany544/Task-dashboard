@@ -160,30 +160,49 @@ export default function Dashboard() {
     };
   }, []);
 
+  const uploadToCloudinary = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "auto");
+    
+    const res = await fetch("https://api.cloudinary.com/v1_1/dge5epxt2/auto/upload", {
+      method: "POST",
+      body: formData,
+    });
+    
+    if (!res.ok) {
+      throw new Error("Failed to upload to Cloudinary");
+    }
+    
+    const data = await res.json();
+    return data.secure_url;
+  };
+
   const handleConfirmFunds = async () => {
     if (!task) return;
+    if (!receiptFile) {
+      alert("Please upload a receipt file to proceed.");
+      return;
+    }
+
     setSubmitting(true);
     try {
-      if (receiptFile) {
-        // Upload proof image/pdf
-        const formData = new FormData();
-        formData.append("proof", receiptFile);
-
-        const res = await fetch(`/api/tasks/${task.task_id}/funding-proof`, {
-          method: "PATCH",
-          body: formData
-        });
-        if (res.ok) {
-          setFundingStatus("pending");
-        } else {
-          alert("Unable to submit proof, try again.");
-        }
+      const secureUrl = await uploadToCloudinary(receiptFile);
+      
+      const res = await fetch(`/api/tasks/${task.task_id}/funding-proof`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ proof_url: secureUrl })
+      });
+      
+      if (res.ok) {
+        setFundingStatus("pending");
       } else {
-        // Fallback for ref number (for now we still consider it pending)
-        alert("Please upload a receipt file to proceed.");
+        alert("Unable to submit proof, try again.");
       }
     } catch (e) {
-      alert("Unable to confirm, try again later");
+      console.error(e);
+      alert("Unable to upload or confirm, try again later");
     } finally {
       setSubmitting(false);
     }
@@ -195,18 +214,24 @@ export default function Dashboard() {
       setSubmitError("Transaction hash and wallet address are required.");
       return;
     }
+    if (!screenshotFile) {
+      setSubmitError("Please upload a proof file (Image, PDF, or Video).");
+      return;
+    }
 
     setSubmitting(true);
     setSubmitError("");
     try {
-      const formData = new FormData();
-      formData.append("tx_hash", txHash.trim());
-      formData.append("wallet", walletAddr.trim());
-      if (screenshotFile) formData.append("screenshot", screenshotFile);
+      const secureUrl = await uploadToCloudinary(screenshotFile);
 
       const res = await fetch(`/api/tasks/${task.task_id}/submit-proof`, {
         method: "PATCH",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tx_hash: txHash.trim(),
+          wallet: walletAddr.trim(),
+          proof_url: secureUrl
+        }),
       });
 
       if (res.ok) {
@@ -218,7 +243,8 @@ export default function Dashboard() {
         setSubmitError(data?.error || "Unable to submit proof, please try again.");
       }
     } catch (e) {
-      setSubmitError("Network error. Unable to submit proof.");
+      console.error(e);
+      setSubmitError("Network error. Unable to upload or submit proof.");
     } finally {
       setSubmitting(false);
     }
@@ -285,6 +311,15 @@ export default function Dashboard() {
     }
   };
 
+  const getFileType = (url: string) => {
+    if (!url) return "unknown";
+    const lowerUrl = url.toLowerCase();
+    if (lowerUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)/) || lowerUrl.includes("image/upload") || lowerUrl.startsWith("data:image")) return "image";
+    if (lowerUrl.endsWith(".pdf") || lowerUrl.includes("/raw/upload") || lowerUrl.includes(".pdf") || lowerUrl.startsWith("data:application/pdf")) return "pdf";
+    if (lowerUrl.match(/\.(mp4|webm|ogg|mov|mkv|3gp|wmv)/) || lowerUrl.includes("video/upload") || lowerUrl.startsWith("data:video")) return "video";
+    return "unknown";
+  };
+
   const handleLogout = () => {
     clearSessionCookie();
     router.push("/login");
@@ -325,20 +360,36 @@ export default function Dashboard() {
 
       <div>
         <label className="block text-sm font-semibold text-slate-700 mb-2">
-          Screenshot Proof <span className="text-slate-400 text-xs font-normal">(optional but recommended)</span>
+          Screenshot/Video Proof <span className="text-red-500">*</span>
         </label>
-        <label className="border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-xl p-10 text-center cursor-pointer flex flex-col items-center justify-center transition-colors group bg-slate-50 hover:bg-blue-50">
-          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
-            <Upload className="w-6 h-6 text-blue-600" />
-          </div>
-          <p className="text-sm font-semibold text-slate-700 mb-1 group-hover:text-blue-700">
-            {fileName ? fileName : "Click to upload screenshot"}
-          </p>
-          <p className="text-xs text-slate-400">PNG, JPG or PDF — max 5MB</p>
+        <label className="border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-xl p-4 text-center cursor-pointer flex flex-col items-center justify-center transition-colors group bg-slate-50 hover:bg-blue-50 relative overflow-hidden min-h-[160px]">
+          {screenshotFile ? (
+            <div className="w-full h-full flex flex-col items-center">
+              {(() => {
+                const url = URL.createObjectURL(screenshotFile);
+                const type = getFileType(screenshotFile.name || screenshotFile.type);
+                if (type === "image") return <img src={url} alt="Preview" className="max-h-32 object-contain rounded mb-2" />;
+                if (type === "video") return <video src={url} className="max-h-32 rounded mb-2" />;
+                return <div className="p-4 bg-white rounded-lg border border-slate-200 mb-2 flex items-center"><ClipboardList className="w-8 h-8 text-blue-500 mr-2" /> <span className="text-sm font-bold">PDF Document</span></div>;
+              })()}
+              <p className="text-xs font-bold text-blue-600">{fileName}</p>
+              <p className="text-[10px] text-slate-400 mt-1">Click to change file</p>
+            </div>
+          ) : (
+            <>
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
+                <Upload className="w-6 h-6 text-blue-600" />
+              </div>
+              <p className="text-sm font-semibold text-slate-700 mb-1 group-hover:text-blue-700">
+                Click to upload proof
+              </p>
+              <p className="text-xs text-slate-400">Images, Video or PDF — max 10MB</p>
+            </>
+          )}
           <input
             type="file"
             className="hidden"
-            accept="image/*,.pdf"
+            accept="image/*,.pdf,video/*"
             onChange={(e) => {
               const f = e.target.files?.[0];
               if (f) {
@@ -904,20 +955,35 @@ export default function Dashboard() {
 
                             <div>
                               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                Upload Receipt or Transfer Confirmation (Image/PDF)
+                                Upload Receipt or Transfer Confirmation (Image/PDF/Video)
                               </label>
-                              <label className="border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center transition-colors group bg-slate-50 hover:bg-blue-50">
-                                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-2 group-hover:bg-blue-200 transition-colors">
-                                  <Upload className="w-5 h-5 text-blue-600" />
-                                </div>
-                                <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-700">
-                                  {receiptFileName ? receiptFileName : "Click to upload funding proof"}
-                                </p>
-                                <p className="text-xs text-slate-400 mt-0.5">Image or PDF — max 5MB</p>
+                              <label className="border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center transition-colors group bg-slate-50 hover:bg-blue-50 min-h-[140px]">
+                                {receiptFile ? (
+                                  <div className="w-full h-full flex flex-col items-center">
+                                    {(() => {
+                                      const url = URL.createObjectURL(receiptFile);
+                                      const type = getFileType(receiptFile.name || receiptFile.type);
+                                      if (type === "image") return <img src={url} alt="Preview" className="max-h-24 object-contain rounded mb-2" />;
+                                      if (type === "video") return <video src={url} className="max-h-24 rounded mb-2" />;
+                                      return <div className="p-3 bg-white rounded-lg border border-slate-200 mb-2 flex items-center"><Banknote className="w-6 h-6 text-blue-500 mr-2" /> <span className="text-xs font-bold">PDF Document</span></div>;
+                                    })()}
+                                    <p className="text-xs font-bold text-blue-600">{receiptFileName}</p>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-2 group-hover:bg-blue-200 transition-colors">
+                                      <Upload className="w-5 h-5 text-blue-600" />
+                                    </div>
+                                    <p className="text-sm font-semibold text-slate-700 group-hover:text-blue-700">
+                                      Click to upload funding proof
+                                    </p>
+                                    <p className="text-xs text-slate-400 mt-0.5">Image, PDF or Video — max 10MB</p>
+                                  </>
+                                )}
                                 <input
                                   type="file"
                                   className="hidden"
-                                  accept="image/*,.pdf"
+                                  accept="image/*,.pdf,video/*"
                                   onChange={(e) => {
                                     const f = e.target.files?.[0];
                                     if (f) {
