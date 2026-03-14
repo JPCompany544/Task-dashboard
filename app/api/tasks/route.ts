@@ -58,7 +58,7 @@ export async function POST(request: Request) {
             INSERT INTO tasks (
               task_id, employee_id, token, purchase_amount, exchange, 
               commission, deadline, status, funding_method, funding_confirmed, funding_status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending', ?, 0, 'none')
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending', ?, FALSE, 'none')
           `);
 
           stmt.run(
