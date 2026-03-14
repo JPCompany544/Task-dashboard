@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   return new Promise<NextResponse>((resolve) => {
-    db.all("SELECT * FROM employees ORDER BY created_at DESC", [], (err, rows) => {
+    db.all("SELECT * FROM employees ORDER BY created_at DESC", [], (err: any, rows: any) => {
       if (err) {
         resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
       } else {
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
     return new Promise<NextResponse>((resolve) => {
       // Check if email exists
-      db.get("SELECT email FROM employees WHERE email = ?", [email.toLowerCase()], (err, row) => {
+      db.get("SELECT email FROM employees WHERE email = ?", [email.toLowerCase()], (err: any, row: any) => {
         if (err) {
           resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
           return;
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
           const num = Math.floor(10000 + Math.random() * 90000);
           const empId = `EMP-${num}`;
 
-          db.get("SELECT employee_id FROM employees WHERE employee_id = ?", [empId], (err, row) => {
+          db.get("SELECT employee_id FROM employees WHERE employee_id = ?", [empId], (err: any, row: any) => {
             if (err) {
               resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
               return;
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
                   resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
                 } else {
                   // Fetch the newly created record
-                  db.get("SELECT * FROM employees WHERE id = ?", [this.lastID], (err, newRow: any) => {
+                  db.get("SELECT * FROM employees WHERE id = ?", [this.lastID], (err: any, newRow: any) => {
                     resolve(NextResponse.json({
                       ...newRow,
                       active_task: Boolean(newRow.active_task),

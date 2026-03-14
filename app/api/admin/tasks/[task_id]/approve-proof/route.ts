@@ -27,7 +27,7 @@ export async function PATCH(
              updated_at         = CURRENT_TIMESTAMP
          WHERE task_id = ?`,
         [adminEmail, taskId],
-        function (err) {
+        function (this: any, err: any) {
           if (err) {
             console.error("DB error approving proof:", err);
             return resolve(

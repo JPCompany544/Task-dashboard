@@ -28,7 +28,7 @@ export async function PATCH(
 
     // Check task exists and belongs to an employee
     const task = await new Promise<any>((resolve, reject) => {
-      db.get("SELECT * FROM tasks WHERE task_id = ?", [taskId], (err, row) => {
+      db.get("SELECT * FROM tasks WHERE task_id = ?", [taskId], (err: any, row: any) => {
         if (err) reject(err);
         else resolve(row);
       });
@@ -60,7 +60,7 @@ export async function PATCH(
              updated_at           = CURRENT_TIMESTAMP
          WHERE task_id = ?`,
         [txHash, wallet, proofUrl, taskId],
-        function (err) {
+        function (this: any, err: any) {
           if (err) {
             console.error("DB error submitting proof:", err);
             return resolve(

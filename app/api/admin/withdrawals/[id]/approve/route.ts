@@ -25,7 +25,7 @@ export async function PATCH(
              reviewed_at = CURRENT_TIMESTAMP
          WHERE withdrawal_id = ? AND status = 'pending'`,
         [adminEmail, withdrawalId],
-        function (err) {
+        function (this: any, err: any) {
           if (err) {
             console.error("DB error approving withdrawal:", err);
             return resolve(

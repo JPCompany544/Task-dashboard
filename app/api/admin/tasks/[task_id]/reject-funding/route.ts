@@ -18,7 +18,7 @@ export async function PATCH(
              updated_at = CURRENT_TIMESTAMP 
          WHERE task_id = ?`,
         [taskId],
-        function (err) {
+        function (this: any, err: any) {
           if (err) {
             console.error("Database error rejecting funding:", err);
             return resolve(NextResponse.json({ error: "Failed to reject funding" }, { status: 500 }));

@@ -12,7 +12,7 @@ export async function GET() {
        WHERE t.proof_status = 'pending'
        ORDER BY t.updated_at DESC`,
       [],
-      (err, rows) => {
+      (err: any, rows: any) => {
         if (err) {
           console.error("Database error fetching pending proofs:", err);
           return resolve(

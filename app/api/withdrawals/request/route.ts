@@ -30,7 +30,7 @@ export async function POST(request: Request) {
            (SELECT COALESCE(SUM(amount), 0) FROM withdrawals WHERE employee_id = ? AND status = 'approved') AS total_withdrawn
         `,
         [employee_id, employee_id],
-        (err, row: any) => {
+        (err: any, row: any) => {
           if (err) reject(err);
           else {
             const earnings = Number(row?.total_earnings ?? 0);
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
         `INSERT INTO withdrawals (withdrawal_id, employee_id, token, wallet_address, amount, status)
          VALUES (?, ?, ?, ?, ?, 'pending')`,
         [withdrawalId, employee_id, token, wallet_address, numAmount],
-        function (err) {
+        function (this: any, err: any) {
           if (err) {
             console.error("DB error inserting withdrawal:", err);
             return resolve(

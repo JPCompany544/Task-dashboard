@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       : "SELECT * FROM tasks ORDER BY created_at DESC";
     const params = employee_id ? [employee_id] : [];
 
-    db.all(query, params, (err, rows) => {
+    db.all(query, params, (err: any, rows: any) => {
       if (err) {
         resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
       } else {
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       db.get(
         "SELECT task_id FROM tasks WHERE employee_id = ? AND status IN ('Pending', 'Started', 'In Progress', 'Proof Submitted', 'Awaiting Approval')",
         [employee_id],
-        (err, row) => {
+        (err: any, row: any) => {
           if (err) {
             return resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
           }
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
               
               // Also update the employee to reflect an active task
               db.run("UPDATE employees SET active_task = 1 WHERE employee_id = ?", [employee_id], () => {
-                db.get("SELECT * FROM tasks WHERE task_id = ?", [task_id], (err3, newRow: any) => {
+                db.get("SELECT * FROM tasks WHERE task_id = ?", [task_id], (err3: any, newRow: any) => {
                   resolve(NextResponse.json({
                     ...newRow,
                     funding_confirmed: Boolean(newRow?.funding_confirmed)

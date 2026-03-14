@@ -17,7 +17,7 @@ export async function GET(request: Request) {
        WHERE employee_id = ?
        ORDER BY created_at DESC`,
       [employee_id],
-      (err, rows) => {
+      (err: any, rows: any) => {
         if (err) {
           console.error("Error fetching withdrawals:", err);
           return resolve(

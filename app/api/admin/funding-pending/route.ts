@@ -11,7 +11,7 @@ export async function GET() {
        JOIN employees e ON t.employee_id = e.employee_id
        WHERE t.funding_status = 'pending'`,
       [],
-      (err, rows) => {
+      (err: any, rows: any) => {
         if (err) {
           console.error("Database error fetching pending funding tasks:", err);
           return resolve(NextResponse.json({ error: "Failed to fetch pending tasks" }, { status: 500 }));

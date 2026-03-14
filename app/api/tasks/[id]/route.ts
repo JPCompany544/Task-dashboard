@@ -44,11 +44,11 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     return new Promise<NextResponse>((resolve) => {
       const stmt = db.prepare(`UPDATE tasks SET ${updates.join(", ")} WHERE task_id = ?`);
-      stmt.run(values, function (err) {
+      stmt.run(values, function (this: any, err: any) {
         if (err) {
           resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
         } else {
-          db.get("SELECT * FROM tasks WHERE task_id = ?", [taskId], (selectErr, row: any) => {
+          db.get("SELECT * FROM tasks WHERE task_id = ?", [taskId], (selectErr: any, row: any) => {
             resolve(NextResponse.json({
               ...row,
               funding_confirmed: Boolean(row?.funding_confirmed)

@@ -29,7 +29,7 @@ export async function PATCH(
              updated_at = CURRENT_TIMESTAMP 
          WHERE task_id = ?`,
         [adminEmail, taskId],
-        function (err) {
+        function (this: any, err: any) {
           if (err) {
             console.error("Database error approving funding:", err);
             return resolve(NextResponse.json({ error: "Failed to approve funding" }, { status: 500 }));

@@ -12,7 +12,7 @@ export async function GET() {
        WHERE w.status = 'pending'
        ORDER BY w.created_at ASC`,
       [],
-      (err, rows) => {
+      (err: any, rows: any) => {
         if (err) {
           console.error("Database error fetching pending withdrawals:", err);
           return resolve(

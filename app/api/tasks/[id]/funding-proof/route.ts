@@ -39,7 +39,7 @@ export async function PATCH(
              updated_at = CURRENT_TIMESTAMP 
          WHERE task_id = ?`,
         [relativeFilePath, taskId],
-        function (err) {
+        function (this: any, err: any) {
           if (err) {
             console.error("Database error updating funding proof:", err);
             resolve(NextResponse.json({ error: "Failed to update funding proof status" }, { status: 500 }));

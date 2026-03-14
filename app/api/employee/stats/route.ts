@@ -19,7 +19,7 @@ export async function GET(request: Request) {
          (SELECT COALESCE(SUM(amount), 0) FROM withdrawals WHERE employee_id = ? AND status = 'approved') AS total_withdrawn
       `,
       [employee_id, employee_id, employee_id],
-      (err, row: any) => {
+      (err: any, row: any) => {
         if (err) {
           console.error("Error fetching employee stats:", err);
           return resolve(

@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       db.get(
         "SELECT * FROM employees WHERE email = ? AND employee_id = ?",
         [email.toLowerCase().trim(), employee_id.trim()],
-        (err, row: any) => {
+        (err: any, row: any) => {
           if (err) {
             resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
             return;
