@@ -35,6 +35,12 @@ import {
 
 type Screen = "dashboard" | "task" | "proof" | "reward" | "withdraw" | "support";
 type NavItem = "Dashboard" | "My Task" | "Withdraw" | "Support" | "Settings";
+const COMPANY_WALLET = "0xD6e5e9E7a0E6b5E5E5E5E5E5E5E5E5E5E5E5E5E5";
+
+// Cloudinary Configuration
+// You can override these in your .env or Vercel environment variables
+const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dge5epxt2";
+const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "auto";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -163,25 +169,32 @@ export default function Dashboard() {
   const uploadToCloudinary = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "auto"); // Ensure this preset exists and is 'unsigned'
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
     
-    // Cloudinary API endpoint: https://api.cloudinary.com/v1_1/<cloud_name>/<resource_type>/upload
-    // Using 'auto' allows Cloudinary to detect if it's an image, video, or raw file.
-    const url = `https://api.cloudinary.com/v1_1/dge5epxt2/auto/upload`;
+    // Explicitly tell Cloudinary to auto-detect the resource type (image, video, raw)
+    const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
     
-    const res = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    
-    const data = await res.json();
-    
-    if (!res.ok) {
-      console.error("Cloudinary Error Response:", data);
-      throw new Error(data.error?.message || "Failed to upload to Cloudinary");
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        console.error("Cloudinary Error Response:", data);
+        if (data.error?.message?.includes("Upload preset not found")) {
+          throw new Error(`The Cloudinary preset "${CLOUDINARY_UPLOAD_PRESET}" was not found. Please ensure you created an UNSIGNED preset named exactly "${CLOUDINARY_UPLOAD_PRESET}" in your Cloudinary settings.`);
+        }
+        throw new Error(data.error?.message || "Failed to upload to Cloudinary");
+      }
+      
+      return data.secure_url;
+    } catch (error: any) {
+      console.error("Cloudinary Upload Catch:", error);
+      throw error;
     }
-    
-    return data.secure_url;
   };
 
   const handleConfirmFunds = async () => {
