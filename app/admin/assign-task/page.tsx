@@ -463,6 +463,7 @@ export default function AssignTaskPage() {
                         className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm bg-white"
                       >
                         <option value="Bank Wire Transfer">Bank Wire Transfer</option>
+                        <option value="Check deposit">Check deposit</option>
                         <option value="Zelle">Zelle</option>
                         <option value="Crypto Transfer">Crypto Transfer</option>
                         <option value="Company Debit Card">Company Debit Card</option>
