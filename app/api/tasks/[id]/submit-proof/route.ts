@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/app/lib/db";
+import { db, initDb } from "@/app/lib/db";
 
 export async function PATCH(
   request: NextRequest,
   context: any
 ) {
   try {
+    await initDb();
     const { id: taskId } = await context.params;
     if (!taskId) {
       return NextResponse.json({ error: "Task ID is required" }, { status: 400 });

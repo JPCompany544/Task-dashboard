@@ -87,7 +87,7 @@ export const db = {
   }
 };
 
-export function initDb() {
+export async function initDb() {
   const schema = `
     CREATE TABLE IF NOT EXISTS employees (
       id SERIAL PRIMARY KEY,
@@ -107,24 +107,7 @@ export function initDb() {
       exchange TEXT NOT NULL,
       commission REAL NOT NULL,
       deadline TEXT NOT NULL,
-      status TEXT DEFAULT 'Pending',
-      funding_method TEXT,
-      funding_confirmed BOOLEAN DEFAULT FALSE,
-      proof_tx_hash TEXT,
-      proof_wallet TEXT,
-      proof_screenshot TEXT,
-      funding_proof_url TEXT,
-      funding_status TEXT DEFAULT 'none',
-      funding_reviewed_by TEXT,
-      funding_reviewed_at TIMESTAMPTZ,
-      completion_proof_url TEXT,
-      completion_tx_hash TEXT,
-      completion_wallet TEXT,
-      proof_status TEXT DEFAULT 'none',
-      proof_reviewed_by TEXT,
-      proof_reviewed_at TIMESTAMPTZ,
-      created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      status TEXT DEFAULT 'Pending'
     );
 
     CREATE TABLE IF NOT EXISTS withdrawals (
@@ -134,13 +117,40 @@ export function initDb() {
       wallet_address TEXT NOT NULL,
       amount REAL NOT NULL,
       status TEXT DEFAULT 'pending',
-      created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-      reviewed_by TEXT,
-      reviewed_at TIMESTAMPTZ
+      created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
   `;
 
-  pool.query(schema).catch(err => {
-    console.error("Error creating Postgres tables:", err);
-  });
+  try {
+    await pool.query(schema);
+    
+    // Ensure all columns exist in tasks
+    const alterCommands = [
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS funding_method TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS funding_confirmed BOOLEAN DEFAULT FALSE",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS proof_tx_hash TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS proof_wallet TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS proof_screenshot TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS funding_proof_url TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS funding_status TEXT DEFAULT 'none'",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS funding_reviewed_by TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS funding_reviewed_at TIMESTAMPTZ",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS completion_proof_url TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS completion_tx_hash TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS completion_wallet TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS proof_status TEXT DEFAULT 'none'",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS proof_reviewed_by TEXT",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS proof_reviewed_at TIMESTAMPTZ",
+      "ALTER TABLE tasks ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP",
+      "ALTER TABLE employees ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP",
+      "ALTER TABLE withdrawals ADD COLUMN IF NOT EXISTS reviewed_by TEXT",
+      "ALTER TABLE withdrawals ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMPTZ"
+    ];
+
+    for (const cmd of alterCommands) {
+      await pool.query(cmd).catch(e => console.error("Alter Error:", e.message));
+    }
+  } catch (err) {
+    console.error("Error creating/altering Postgres tables:", err);
+  }
 }
