@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const employee_id = searchParams.get("employee_id");
 
-  return new Promise((resolve) => {
+  return new Promise<NextResponse>((resolve) => {
     const query = employee_id 
       ? "SELECT * FROM tasks WHERE employee_id = ? ORDER BY created_at DESC"
       : "SELECT * FROM tasks ORDER BY created_at DESC";
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       // First, check if the employee already has an active task
       db.get(
         "SELECT task_id FROM tasks WHERE employee_id = ? AND status IN ('Pending', 'Started', 'In Progress', 'Proof Submitted', 'Awaiting Approval')",

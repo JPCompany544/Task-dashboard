@@ -4,7 +4,7 @@ import { db } from "@/app/lib/db";
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  return new Promise((resolve) => {
+  return new Promise<NextResponse>((resolve) => {
     db.all(
       `SELECT t.*, e.name as employee_name 
        FROM tasks t

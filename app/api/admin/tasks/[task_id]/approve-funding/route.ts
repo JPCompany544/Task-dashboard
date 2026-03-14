@@ -20,7 +20,7 @@ export async function PATCH(
       // ignore JSON parse error
     }
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       db.run(
         `UPDATE tasks 
          SET funding_status = 'approved', 

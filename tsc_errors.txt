@@ -1,0 +1,180 @@
+﻿.next/dev/types/validator.ts(153,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/funding-pending/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/funding-pending">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(162,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/proof-pending/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/proof-pending">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(171,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/approve-funding/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/approve-funding">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(180,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/approve-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/approve-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(189,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/reject-funding/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/reject-funding">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(198,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/reject-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/reject-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(207,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/withdrawals/[id]/approve/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/withdrawals/[id]/approve">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(216,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/withdrawals/[id]/reject/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/withdrawals/[id]/reject">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(225,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/withdrawals/pending/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/withdrawals/pending">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(234,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/employee/stats/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/employee/stats">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(243,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/employees/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/employees">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(252,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/login/employee/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/login/employee">'.
+  The types returned by 'POST(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(261,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/[id]/funding-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks/[id]/funding-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(270,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/[id]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks/[id]">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(279,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/[id]/submit-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks/[id]/submit-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(288,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(297,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/withdrawals/request/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/withdrawals/request">'.
+  The types returned by 'POST(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/dev/types/validator.ts(306,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/withdrawals/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/withdrawals">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(153,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/funding-pending/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/funding-pending">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(162,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/proof-pending/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/proof-pending">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(171,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/approve-funding/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/approve-funding">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(180,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/approve-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/approve-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(189,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/reject-funding/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/reject-funding">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(198,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/tasks/[task_id]/reject-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/tasks/[task_id]/reject-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(207,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/withdrawals/[id]/approve/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/withdrawals/[id]/approve">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(216,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/withdrawals/[id]/reject/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/withdrawals/[id]/reject">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(225,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/admin/withdrawals/pending/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/withdrawals/pending">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(234,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/employee/stats/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/employee/stats">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(243,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/employees/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/employees">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(252,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/login/employee/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/login/employee">'.
+  The types returned by 'POST(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(261,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/[id]/funding-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks/[id]/funding-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(270,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/[id]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks/[id]">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(279,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/[id]/submit-proof/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks/[id]/submit-proof">'.
+  The types returned by 'PATCH(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(288,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/tasks/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/tasks">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(297,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/withdrawals/request/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/withdrawals/request">'.
+  The types returned by 'POST(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.
+.next/types/validator.ts(306,31): error TS2344: Type 'typeof import("C:/Users/nnamd/Documents/trustwallet-task-dashboard/app/api/withdrawals/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/withdrawals">'.
+  The types returned by 'GET(...)' are incompatible between these types.
+    Type 'Promise<unknown>' is not assignable to type 'void | Response | Promise<void | Response>'.
+      Type 'Promise<unknown>' is not assignable to type 'Promise<void | Response>'.
+        Type 'unknown' is not assignable to type 'void | Response'.

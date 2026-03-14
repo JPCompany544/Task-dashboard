@@ -7,7 +7,7 @@ initDb();
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  return new Promise((resolve) => {
+  return new Promise<NextResponse>((resolve) => {
     db.all("SELECT * FROM employees ORDER BY created_at DESC", [], (err, rows) => {
       if (err) {
         resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
     }
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       // Check if email exists
       db.get("SELECT email FROM employees WHERE email = ?", [email.toLowerCase()], (err, row) => {
         if (err) {

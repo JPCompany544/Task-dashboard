@@ -42,7 +42,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     values.push(taskId); // Push end target map query param
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       const stmt = db.prepare(`UPDATE tasks SET ${updates.join(", ")} WHERE task_id = ?`);
       stmt.run(values, function (err) {
         if (err) {

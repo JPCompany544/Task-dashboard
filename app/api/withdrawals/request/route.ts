@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     // Insert withdrawal request
     const withdrawalId = "WD-" + crypto.randomBytes(4).toString("hex").toUpperCase();
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       db.run(
         `INSERT INTO withdrawals (withdrawal_id, employee_id, token, wallet_address, amount, status)
          VALUES (?, ?, ?, ?, ?, 'pending')`,

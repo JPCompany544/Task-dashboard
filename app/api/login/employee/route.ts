@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email and Employee ID are required" }, { status: 400 });
     }
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       // Find employee
       db.get(
         "SELECT * FROM employees WHERE email = ? AND employee_id = ?",

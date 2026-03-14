@@ -11,7 +11,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
     }
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       db.run(
         `UPDATE tasks 
          SET funding_status = 'rejected', 

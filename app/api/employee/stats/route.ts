@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "employee_id is required" }, { status: 400 });
   }
 
-  return new Promise((resolve) => {
+  return new Promise<NextResponse>((resolve) => {
     db.get(
       `SELECT
          (SELECT COALESCE(SUM(commission), 0) FROM tasks WHERE employee_id = ? AND proof_status = 'approved') AS total_earnings,

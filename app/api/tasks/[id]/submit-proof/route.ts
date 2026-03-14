@@ -51,7 +51,7 @@ export async function PATCH(
       proofUrl = `/uploads/task_proofs/${fileName}`;
     }
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       db.run(
         `UPDATE tasks
          SET completion_tx_hash   = ?,

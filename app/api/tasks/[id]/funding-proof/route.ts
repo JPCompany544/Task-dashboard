@@ -36,7 +36,7 @@ export async function PATCH(
     await writeFile(filePath, buffer);
 
     // Update the database
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       db.run(
         `UPDATE tasks 
          SET funding_proof_url = ?, 

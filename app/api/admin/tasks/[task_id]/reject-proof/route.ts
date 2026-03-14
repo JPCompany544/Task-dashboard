@@ -17,7 +17,7 @@ export async function PATCH(
       if (body?.admin_email) adminEmail = body.admin_email;
     } catch (e) { /* no body is fine */ }
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       db.run(
         `UPDATE tasks
          SET proof_status      = 'rejected',
