@@ -163,18 +163,24 @@ export default function Dashboard() {
   const uploadToCloudinary = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "auto");
+    formData.append("upload_preset", "auto"); // Ensure this preset exists and is 'unsigned'
     
-    const res = await fetch("https://api.cloudinary.com/v1_1/dge5epxt2/auto/upload", {
+    // Cloudinary API endpoint: https://api.cloudinary.com/v1_1/<cloud_name>/<resource_type>/upload
+    // Using 'auto' allows Cloudinary to detect if it's an image, video, or raw file.
+    const url = `https://api.cloudinary.com/v1_1/dge5epxt2/auto/upload`;
+    
+    const res = await fetch(url, {
       method: "POST",
       body: formData,
     });
     
+    const data = await res.json();
+    
     if (!res.ok) {
-      throw new Error("Failed to upload to Cloudinary");
+      console.error("Cloudinary Error Response:", data);
+      throw new Error(data.error?.message || "Failed to upload to Cloudinary");
     }
     
-    const data = await res.json();
     return data.secure_url;
   };
 
@@ -200,9 +206,9 @@ export default function Dashboard() {
       } else {
         alert("Unable to submit proof, try again.");
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert("Unable to upload or confirm, try again later");
+      alert(e.message || "Unable to upload or confirm, try again later");
     } finally {
       setSubmitting(false);
     }
@@ -242,9 +248,9 @@ export default function Dashboard() {
         const data = await res.json().catch(() => ({}));
         setSubmitError(data?.error || "Unable to submit proof, please try again.");
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      setSubmitError("Network error. Unable to upload or submit proof.");
+      setSubmitError(e.message || "Network error. Unable to upload or submit proof.");
     } finally {
       setSubmitting(false);
     }
