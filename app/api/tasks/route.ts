@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db, initDb } from "@/app/lib/db";
 
 initDb();
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const employee_id = searchParams.get("employee_id");
 
@@ -33,12 +33,13 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { employee_id, token, purchase_amount, exchange, commission, funding_method, deadline } = body;
 
     if (!employee_id || !token || !purchase_amount || !exchange || commission === undefined || !deadline) {
+      console.error("POST TASK ERROR: Missing fields", body);
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -61,32 +62,41 @@ export async function POST(request: Request) {
     // No active task, proceed to create
     const task_id = `TASK-${Math.floor(100000 + Math.random() * 900000)}`;
 
-    await new Promise((resolve, reject) => {
-      const stmt = db.prepare(`
-        INSERT INTO tasks (
-          task_id, employee_id, token, purchase_amount, exchange, 
-          commission, deadline, status, funding_method, funding_confirmed, funding_status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending', ?, FALSE, 'none')
-      `);
+    try {
+      await new Promise((resolve, reject) => {
+        const stmt = db.prepare(`
+          INSERT INTO tasks (
+            task_id, employee_id, token, purchase_amount, exchange, 
+            commission, deadline, status, funding_method, funding_confirmed, funding_status
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending', ?, FALSE, 'none')
+        `);
 
-      stmt.run(
-        [task_id, employee_id, token, Number(purchase_amount), exchange, Number(commission), deadline, funding_method || null],
-        function (err2: any) {
-          if (err2) reject(err2);
-          else resolve(true);
-        }
-      );
-      stmt.finalize();
-    });
+        stmt.run(
+          [task_id, employee_id, token, Number(purchase_amount), exchange, Number(commission), deadline, funding_method || null],
+          function (err2: any, res: any) {
+            if (err2) reject(err2);
+            else resolve(true);
+          }
+        );
+        stmt.finalize();
+      });
+    } catch (insertErr: any) {
+      console.error("INSERT TASK ERROR:", insertErr);
+      throw insertErr;
+    }
 
     // Also update the employee to reflect an active task
-    await new Promise((resolve, reject) => {
-      // Postgres uses TRUE for boolean columns
-      db.run("UPDATE employees SET active_task = TRUE WHERE employee_id = ?", [employee_id], (err: any) => {
-        if (err) reject(err);
-        else resolve(true);
+    try {
+      await new Promise((resolve, reject) => {
+        db.run("UPDATE employees SET active_task = TRUE WHERE employee_id = ?", [employee_id], (err: any) => {
+          if (err) reject(err);
+          else resolve(true);
+        });
       });
-    });
+    } catch (updateErr: any) {
+      console.error("UPDATE EMPLOYEE ERROR:", updateErr);
+      // Don't throw here if task was created, but log it
+    }
 
     const newTask: any = await new Promise((resolve, reject) => {
       db.get("SELECT * FROM tasks WHERE task_id = ?", [task_id], (err3: any, newRow: any) => {
@@ -101,7 +111,7 @@ export async function POST(request: Request) {
     }, { status: 201 });
 
   } catch (error: any) {
-    console.error("POST TASK ERROR:", error);
+    console.error("POST TASK CRITICAL ERROR:", error);
     return NextResponse.json({ error: "Internal server error", details: error.message }, { status: 500 });
   }
 }
