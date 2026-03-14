@@ -24,9 +24,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       if (allowedUpdates.includes(key)) {
         updates.push(`${key} = ?`);
         
-        // Ensure accurate boolean resolution for SQLite integer cast
+        // Ensure accurate boolean resolution
         if (key === "funding_confirmed") {
-          values.push(body[key] ? true : false);
+          values.push(!!body[key]);
         } else {
           values.push(body[key]);
         }
@@ -42,24 +42,33 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     values.push(taskId); // Push end target map query param
 
-    return new Promise<NextResponse>((resolve) => {
+    await new Promise((resolve, reject) => {
       const stmt = db.prepare(`UPDATE tasks SET ${updates.join(", ")} WHERE task_id = ?`);
       stmt.run(values, function (this: any, err: any) {
-        if (err) {
-          resolve(NextResponse.json({ error: "Database error" }, { status: 500 }));
-        } else {
-          db.get("SELECT * FROM tasks WHERE task_id = ?", [taskId], (selectErr: any, row: any) => {
-            resolve(NextResponse.json({
-              ...row,
-              funding_confirmed: Boolean(row?.funding_confirmed)
-            }, { status: 200 }));
-          });
-        }
+        if (err) reject(err);
+        else resolve(this.changes);
       });
       stmt.finalize();
     });
 
-  } catch (error) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    const updatedRow: any = await new Promise((resolve, reject) => {
+      db.get("SELECT * FROM tasks WHERE task_id = ?", [taskId], (err: any, row: any) => {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
+
+    if (!updatedRow) {
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      ...updatedRow,
+      funding_confirmed: Boolean(updatedRow.funding_confirmed)
+    }, { status: 200 });
+
+  } catch (error: any) {
+    console.error("PATCH TASK ERROR:", error);
+    return NextResponse.json({ error: "Internal server error", details: error.message }, { status: 500 });
   }
 }
