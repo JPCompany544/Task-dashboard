@@ -1,15 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/app/lib/db";
-import { writeFile } from "fs/promises";
-import path from "path";
-import crypto from "crypto";
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  context: any
 ) {
   try {
-    const { id: taskId } = await params;
+    const { id: taskId } = await context.params;
     if (!taskId) {
       return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
     }
@@ -30,8 +27,7 @@ export async function PATCH(
     const base64Data = buffer.toString("base64");
     const relativeFilePath = `data:${mimeType};base64,${base64Data}`;
 
-    // Update the database
-    return new Promise<NextResponse>((resolve) => {
+    const result: any = await new Promise((resolve, reject) => {
       db.run(
         `UPDATE tasks 
          SET funding_proof_url = ?, 
@@ -40,23 +36,21 @@ export async function PATCH(
          WHERE task_id = ?`,
         [relativeFilePath, taskId],
         function (this: any, err: any) {
-          if (err) {
-            console.error("Database error updating funding proof:", err);
-            resolve(NextResponse.json({ error: "Failed to update funding proof status" }, { status: 500 }));
-            return;
-          }
-          if (this.changes === 0) {
-            resolve(NextResponse.json({ error: "Task not found" }, { status: 404 }));
-            return;
-          }
-          resolve(NextResponse.json({ success: true, proof_url: relativeFilePath }));
+          if (err) reject(err);
+          else resolve({ changes: this.changes });
         }
       );
     });
-  } catch (error) {
-    console.error("Error processing funding proof upload:", error);
+
+    if (result.changes === 0) {
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, proof_url: relativeFilePath });
+  } catch (error: any) {
+    console.error("FUNDING PROOF ERROR:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error.message },
       { status: 500 }
     );
   }

@@ -1,11 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db, initDb } from "@/app/lib/db";
 
 initDb();
 
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(
+  request: NextRequest, 
+  context: any
+) {
   try {
-    const { id: taskId } = await params;
+    const { id: taskId } = await context.params;
     const body = await request.json();
 
     const allowedUpdates = [
