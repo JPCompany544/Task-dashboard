@@ -49,7 +49,7 @@ export const db = {
     let finalSql = translateSql(sql);
     try {
       if (finalSql.trim().toUpperCase().startsWith("INSERT") && !finalSql.toUpperCase().includes("RETURNING")) {
-         finalSql = finalSql.trim() + " RETURNING id";
+         finalSql = finalSql.trim() + " RETURNING *";
       }
       const res = await pool.query(finalSql, params);
       const context = { 
@@ -72,7 +72,7 @@ export const db = {
         let finalSql = translateSql(sql);
         try {
           if (finalSql.trim().toUpperCase().startsWith("INSERT") && !finalSql.toUpperCase().includes("RETURNING")) {
-             finalSql = finalSql.trim() + " RETURNING id";
+             finalSql = finalSql.trim() + " RETURNING *";
           }
           const res = await pool.query(finalSql, params);
           const context = { changes: res.rowCount || 0, lastID: (res.rows && res.rows[0] && res.rows[0].id) || 0 };
