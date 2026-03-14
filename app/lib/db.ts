@@ -14,27 +14,40 @@ const translateSql = (sql: string) => {
 
 export const db = {
   all: async (sql: string, params: any[], cb?: any) => {
-    if (typeof params === 'function') { cb = params; params = []; }
+    if (typeof params === 'function') { 
+      cb = params; 
+      params = []; 
+    }
+    const finalSql = translateSql(sql);
     try {
-      const { rows } = await pool.query(translateSql(sql), params);
+      const { rows } = await pool.query(finalSql, params);
       if (cb) cb(null, rows);
-    } catch (err: any) {
+    } catch (err) {
+      console.error('DB ALL ERROR:', err, finalSql);
       if (cb) cb(err);
     }
   },
   get: async (sql: string, params: any[], cb?: any) => {
-    if (typeof params === 'function') { cb = params; params = []; }
+    if (typeof params === 'function') { 
+      cb = params; 
+      params = []; 
+    }
+    const finalSql = translateSql(sql);
     try {
-      const { rows } = await pool.query(translateSql(sql), params);
+      const { rows } = await pool.query(finalSql, params);
       if (cb) cb(null, rows[0] || null);
-    } catch (err: any) {
+    } catch (err) {
+      console.error('DB GET ERROR:', err, finalSql);
       if (cb) cb(err);
     }
   },
   run: async function(sql: string, params: any[], cb?: any) {
-    if (typeof params === 'function') { cb = params; params = []; }
+    if (typeof params === 'function') { 
+      cb = params; 
+      params = []; 
+    }
+    let finalSql = translateSql(sql);
     try {
-      let finalSql = translateSql(sql);
       if (finalSql.trim().toUpperCase().startsWith("INSERT") && !finalSql.toUpperCase().includes("RETURNING")) {
          finalSql = finalSql.trim() + " RETURNING id";
       }
@@ -44,23 +57,28 @@ export const db = {
         lastID: (res.rows && res.rows[0] && res.rows[0].id) || 0 
       };
       if (cb) cb.call(context, null);
-    } catch (err: any) {
+    } catch (err) {
+      console.error('DB RUN ERROR:', err, finalSql);
       if (cb) cb.call({ changes: 0, lastID: 0 }, err);
     }
   },
   prepare: (sql: string) => {
     return {
       run: async function(params: any[], cb?: any) {
-        if (typeof params === 'function') { cb = params; params = []; }
+        if (typeof params === 'function') { 
+          cb = params; 
+          params = []; 
+        }
+        let finalSql = translateSql(sql);
         try {
-          let finalSql = translateSql(sql);
           if (finalSql.trim().toUpperCase().startsWith("INSERT") && !finalSql.toUpperCase().includes("RETURNING")) {
              finalSql = finalSql.trim() + " RETURNING id";
           }
           const res = await pool.query(finalSql, params);
           const context = { changes: res.rowCount || 0, lastID: (res.rows && res.rows[0] && res.rows[0].id) || 0 };
           if (cb) cb.call(context, null);
-        } catch (err: any) {
+        } catch (err) {
+          console.error('DB PREPARE RUN ERROR:', err, finalSql);
           if (cb) cb.call({ changes: 0, lastID: 0 }, err);
         }
       },

@@ -69,7 +69,7 @@ export async function POST(request: Request) {
               }
               
               // Also update the employee to reflect an active task
-              db.run("UPDATE employees SET active_task = 1 WHERE employee_id = ?", [employee_id], () => {
+              db.run("UPDATE employees SET active_task = true WHERE employee_id = ?", [employee_id], () => {
                 db.get("SELECT * FROM tasks WHERE task_id = ?", [task_id], (err3: any, newRow: any) => {
                   resolve(NextResponse.json({
                     ...newRow,

@@ -26,7 +26,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         
         // Ensure accurate boolean resolution for SQLite integer cast
         if (key === "funding_confirmed") {
-          values.push(body[key] ? 1 : 0);
+          values.push(body[key] ? TRUE : FALSE);
         } else {
           values.push(body[key]);
         }

@@ -67,7 +67,7 @@ export async function POST(request: Request) {
               // Insert new employee
               const stmt = db.prepare(`
                 INSERT INTO employees (name, email, employee_id, status, active_task)
-                VALUES (?, ?, ?, 'Active', 0)
+                VALUES (?, ?, ?, 'Active', FALSE)
               `);
 
               stmt.run([name.trim(), email.toLowerCase().trim(), empId], function (this: any, err: any) {
